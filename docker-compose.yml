@@ -1,0 +1,52 @@
+version: '2'
+services:
+  druid:
+     image: fokkodriesprong/docker-druid
+     container_name: docker-druid
+     expose:
+       - 8081
+     links:
+        - kafka
+  
+  zookeeper:
+    image: wurstmeister/zookeeper
+    expose:
+      - 2181
+
+  kafka:
+    image: wurstmeister/kafka
+    expose:
+      - 9092
+    ports:
+      - "9092:9092"
+    hostname: "kafka"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: "stats:1:1"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INSIDE://:9092
+    links:
+      - zookeeper
+
+  docker-superset:
+    image: amancevice/superset
+    container_name: docker-superset
+    ports:
+      - "0.0.0.0:8088:8088"
+    links:
+      - druid
+
+  # producer:
+  #   # image: peterc/jbhh-producer-example:latest
+  #   build:
+  #     context: ./producer
+  #   ports:
+  #     - "8282:80"
+
+  # consumer:
+  #   # image: peterc/jbhh-consumer-example:latest
+  #   build:
+  #     context: ./consumer
+  #   ports:
+  #     - "8283:80"
