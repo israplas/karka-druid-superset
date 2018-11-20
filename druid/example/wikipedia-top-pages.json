@@ -1,0 +1,15 @@
+{
+    "queryType" : "topN",
+    "dataSource" : "devices_records",
+    "intervals" : ["2018-11-18/2018-11-21"],
+    "granularity" : "all",
+    "dimension" : "D_O",
+    "metric" : "count",
+    "threshold" : 10,
+    "aggregations" : [
+      {
+        "type" : "count",
+        "name" : "count"
+      }
+    ]
+  }

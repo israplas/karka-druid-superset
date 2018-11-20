@@ -1,12 +1,21 @@
 version: '2'
 services:
   druid:
-     image: fokkodriesprong/docker-druid
-     container_name: docker-druid
-     expose:
-       - 8081
-     links:
-        - kafka
+    build:
+        context: druid
+    container_name: docker-druid
+    ports:
+      - '8082:8082'
+      - '8081:8081'
+      - '8090:8090'
+    expose:
+      - 8082
+      - 8081
+      - 8090
+    depends_on:
+      - kafka
+    links:
+      - kafka
   
   zookeeper:
     image: wurstmeister/zookeeper
